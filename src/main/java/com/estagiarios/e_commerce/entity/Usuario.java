@@ -8,19 +8,18 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario implements UserDetails {
+public class Usuario{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +36,7 @@ public class Usuario implements UserDetails {
     private String cpf;
 
     @NotNull(message = "Data de nascimento é obrigatório")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
@@ -50,41 +50,20 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private String senha;
 
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_roles",joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "role")
+    private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "ativo")
-    private boolean ativo = true;
-
-    /*@NotBlank(message = "Role é obrigatório")
-    @Column(nullable = false, length = 20)
-    private String role = "ROLE_USER";
-*/
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return  Collections.emptyList();
-    }
-    @Override
-    public String getPassword() {
-        return senha;
-    }
-    @Override
-    public String getUsername() {
-        return cpf;
-    }
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return ativo;
+    public Usuario(Long id, String nome, String cpf, LocalDate dataNascimento, String email, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.email = email;
+        this.senha = senha;
+        this.roles = new HashSet<>();
+        this.roles.add(Role.USER);
     }
 }
