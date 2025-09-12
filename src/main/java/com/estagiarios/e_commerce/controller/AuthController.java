@@ -5,6 +5,10 @@ import com.estagiarios.e_commerce.entity.Usuario;
 import com.estagiarios.e_commerce.security.JwtTokenProvider;
 import com.estagiarios.e_commerce.security.UserPrincipal;
 import com.estagiarios.e_commerce.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,7 @@ import java.util.List;
 @CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:4200}", maxAge = 3600)
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Autenticação", description = "Endpoints para autenticação e gerenciamento de usuários")
 public class AuthController {
 
     private final UsuarioService usuarioService;
@@ -33,16 +38,24 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
 
 
+    @Operation(summary = "Realizar login", description = "Autentica um usuário e retorna um token JWT",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+                            content = @Content(schema = @Schema(implementation = JwtAuthenticationResponse.class))),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dados de login inválidos"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+            })
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        log.info("Tentativa de login para CPF: {}", maskCpf(loginRequest.getCpf()));
+        String email = loginRequest.getEmail();
+        log.info("Tentativa de login para email: {}", maskEmail(email));
 
         try {
             // Autenticar usuário usando Spring Security
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getCpf(),
-                            loginRequest.getSenha()
+                            email,
+                            loginRequest.getPassword()
                     )
             );
 
@@ -64,24 +77,29 @@ public class AuthController {
                     userPrincipal.getId(),
                     userPrincipal.getNome(),
                     userPrincipal.getEmail(),
-                    userPrincipal.getCpf(),
+    
                     roles
             ));
 
         } catch (Exception e) {
-            log.warn("Falha na autenticação para CPF: {} - {}",
-                    maskCpf(loginRequest.getCpf()), e.getMessage());
+            String errorMessage = "Falha na autenticação para email: " + maskEmail(loginRequest.getEmail()) + " - " + e.getMessage();
+            log.warn(errorMessage);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse(false, "CPF ou senha inválidos"));
+                    .body(new ApiResponse(false, "Email ou senha inválidos"));
         }
     }
 
 
+    @Operation(summary = "Registrar usuário", description = "Registra um novo usuário no sistema",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dados de registro inválidos"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Email já cadastrado")
+            })
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        log.info("Tentativa de registro para CPF: {} e email: {}",
-                maskCpf(registerRequest.getCpf()),
-                maskEmail(registerRequest.getEmail()));
+        log.info("Tentativa de registro para email: {}",
+                 maskEmail(registerRequest.getEmail()));
 
         try {
             Usuario usuario = usuarioService.registrarUsuario(registerRequest);
@@ -90,53 +108,23 @@ public class AuthController {
                     .body(new ApiResponse(true, "Usuário registrado com sucesso"));
 
         } catch (IllegalArgumentException e) {
-            log.warn("Erro de validação durante registro para CPF: {} - {}",
-                    maskCpf(registerRequest.getCpf()), e.getMessage());
+            log.warn("Erro de validação durante registro para email: {} - {}",
+                     maskEmail(registerRequest.getEmail()), e.getMessage());
             return ResponseEntity.badRequest()
                     .body(new ApiResponse(false, e.getMessage()));
         } catch (Exception e) {
-            log.error("Erro inesperado durante registro para CPF: {} - {}",
-                    maskCpf(registerRequest.getCpf()), e.getMessage(), e);
+            log.error("Erro inesperado durante registro para email: {} - {}",
+                     maskEmail(registerRequest.getEmail()), e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Erro interno do servidor"));
         }
     }
 
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        log.info("Tentativa de recuperação de senha para CPF: {}",
-                maskCpf(forgotPasswordRequest.getCpf()));
-
-        try {
-            Usuario usuario = usuarioService.recuperarSenha(forgotPasswordRequest);
-            log.info("Senha recuperada com sucesso para usuário: {}", usuario.getNome());
-            return ResponseEntity.ok(new ApiResponse(true, "Senha redefinida com sucesso"));
-
-        } catch (IllegalArgumentException e) {
-            log.warn("Erro de validação durante recuperação de senha para CPF: {} - {}",
-                    maskCpf(forgotPasswordRequest.getCpf()), e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponse(false, e.getMessage()));
-        } catch (Exception e) {
-            log.error("Erro inesperado durante recuperação de senha para CPF: {} - {}",
-                    maskCpf(forgotPasswordRequest.getCpf()), e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Erro interno do servidor"));
-        }
-    }
 
 
-    private String maskCpf(String cpf) {
-        if (cpf == null || cpf.length() < 11) {
-            return "***";
-        }
-        String cleanCpf = cpf.replaceAll("\\D", "");
-        if (cleanCpf.length() != 11) {
-            return "***";
-        }
-        return cleanCpf.substring(0, 9) + "XX";
-    }
+
+
 
 
     private String maskEmail(String email) {
@@ -150,5 +138,7 @@ public class AuthController {
         }
         return localPart.charAt(0) + "***@" + parts[1];
     }
+
+
 }
 

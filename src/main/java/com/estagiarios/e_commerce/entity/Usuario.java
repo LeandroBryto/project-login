@@ -26,18 +26,14 @@ public class Usuario{
     private Long id;
 
     @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, max = 50, message = "Nome deve ter entre 3 e 50 caracteres")
-    @Column(nullable = false, length = 50)
+    @Size(min = 2, max = 100, message = "Nome deve ter entre 2 e 100 caracteres")
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @NotBlank(message = "CPF é obrigatório")
-    @Size(min = 11, max = 11, message = "CPF deve ter 11 dígitos")
-    @Column(nullable = false,unique = true, length = 11)
-    private String cpf;
 
-    @NotNull(message = "Data de nascimento é obrigatório")
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "data_nascimento", nullable = false)
+    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
     @NotBlank(message = "Email é obrigatório")
@@ -56,11 +52,10 @@ public class Usuario{
     @Column(name = "role")
     private Set<Role> roles = new HashSet<>();
 
-    public Usuario(Long id, String nome, String cpf, LocalDate dataNascimento, String email, String senha) {
-        this.id = id;
+
+
+    public Usuario(String nome, String email, String senha) {
         this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
         this.email = email;
         this.senha = senha;
         this.roles = new HashSet<>();

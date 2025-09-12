@@ -55,6 +55,11 @@ public class SecurityConfig {
                         // Endpoints públicos
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
+                        // Swagger endpoints
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
                         // Endpoints que requerem autenticação
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

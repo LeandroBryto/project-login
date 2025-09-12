@@ -1,7 +1,6 @@
 com\estagiarios\e_commerce\exception\GlobalExceptionHandler.class
-com\estagiarios\e_commerce\dto\ForgotPasswordRequest$ForgotPasswordRequestBuilder.class
 com\estagiarios\e_commerce\controller\AuthController.class
-com\estagiarios\e_commerce\dto\ForgotPasswordRequest.class
+com\estagiarios\e_commerce\config\SwaggerConfig.class
 com\estagiarios\e_commerce\service\UsuarioService.class
 com\estagiarios\e_commerce\dto\LoginRequest.class
 com\estagiarios\e_commerce\repository\UsuarioRepository.class

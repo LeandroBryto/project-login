@@ -4,7 +4,6 @@ import com.estagiarios.e_commerce.entity.Role;
 import com.estagiarios.e_commerce.entity.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,7 @@ public class UserPrincipal implements UserDetails {
 
     private Long id;
     private String nome;
-    private String cpf;
+
     private String email;
     private String senha;
     private Set<Role> roles;
@@ -27,7 +26,6 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(
                 usuario.getId(),
                 usuario.getNome(),
-                usuario.getCpf(),
                 usuario.getEmail(),
                 usuario.getSenha(),
                 usuario.getRoles()
@@ -47,7 +45,7 @@ public class UserPrincipal implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return cpf;
+        return email;
     }
     @Override
     public boolean isAccountNonExpired() {

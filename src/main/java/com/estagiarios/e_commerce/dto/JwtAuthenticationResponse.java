@@ -16,15 +16,15 @@ public class JwtAuthenticationResponse {
     private Long userId;
     private String nome;
     private String email;
-    private String cpf;
+
     private List<String> roles;
 
-    public JwtAuthenticationResponse(String accessToken,  Long userId, String nome, String email, String cpf, List<String> roles) {
+    public JwtAuthenticationResponse(String accessToken,  Long userId, String nome, String email, List<String> roles) {
         this.accessToken = accessToken;
         this.userId = userId;
         this.nome = nome;
         this.email = email;
-        this.cpf = cpf;
+
         this.roles = roles;
     }
 }

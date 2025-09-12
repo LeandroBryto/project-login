@@ -31,7 +31,7 @@ public class JwtTokenProvider {
                 .subject(Long.toString(userPrincipal.getId()))
                 .claim("nome", userPrincipal.getNome())
                 .claim("email", userPrincipal.getEmail())
-                .claim("cpf", userPrincipal.getCpf())
+
                 .claim("roles", userPrincipal.getAuthorities().stream()
                         .map(authority -> authority.getAuthority())
                         .toList())
@@ -41,14 +41,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateTokenFromUserDetails(Long userId, String nome, String email, String cpf, List<String> roles) {
+    public String generateTokenFromUserDetails(Long userId, String nome, String email, List<String> roles) {
         Date expiryDate = new Date(System.currentTimeMillis() + jwtExpirationInMs);
 
         return Jwts.builder()
                 .subject(Long.toString(userId))
                 .claim("nome", nome)
                 .claim("email", email)
-                .claim("cpf", cpf)
+
                 .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(expiryDate)
@@ -86,15 +86,7 @@ public class JwtTokenProvider {
         return claims.get("email", String.class);
     }
 
-    public String getCpfFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
 
-        return claims.get("cpf", String.class);
-    }
 
     @SuppressWarnings("unchecked")
     public List<String> getRolesFromJWT(String token) {
