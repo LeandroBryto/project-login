@@ -21,12 +21,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 
 @Slf4j
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:4200}", maxAge = 3600)
 @RequiredArgsConstructor
 @Validated
@@ -64,22 +64,13 @@ public class AuthController {
             // Gerar JWT token
             String jwt = tokenProvider.generateToken(authentication);
 
-            // Obter dados do usuário autenticado
+            // Obter dados do usuário autenticado para log
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            List<String> roles = userPrincipal.getAuthorities().stream()
-                    .map(authority -> authority.getAuthority())
-                    .toList();
 
             log.info("Login realizado com sucesso para usuário: {}", userPrincipal.getNome());
 
-            return ResponseEntity.ok(new JwtAuthenticationResponse(
-                    jwt,
-                    userPrincipal.getId(),
-                    userPrincipal.getNome(),
-                    userPrincipal.getEmail(),
-    
-                    roles
-            ));
+            // Retornar apenas o token seguindo boas práticas de segurança
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 
         } catch (Exception e) {
             String errorMessage = "Falha na autenticação para email: " + maskEmail(loginRequest.getEmail()) + " - " + e.getMessage();

@@ -1,30 +1,23 @@
 package com.estagiarios.e_commerce.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+/**
+ * Resposta de autenticação JWT seguindo boas práticas de segurança.
+ * Retorna apenas o token de acesso, mantendo dados sensíveis do usuário
+ * seguros dentro do token JWT.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
-    private Long userId;
-    private String nome;
-    private String email;
 
-    private List<String> roles;
-
-    public JwtAuthenticationResponse(String accessToken,  Long userId, String nome, String email, List<String> roles) {
+    public JwtAuthenticationResponse(String accessToken) {
         this.accessToken = accessToken;
-        this.userId = userId;
-        this.nome = nome;
-        this.email = email;
-
-        this.roles = roles;
+        this.tokenType = "Bearer";
     }
 }
