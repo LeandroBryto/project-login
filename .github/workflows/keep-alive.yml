@@ -1,0 +1,20 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # a cada 10 minutos (UTC)
+  workflow_dispatch: # permite rodar manualmente
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          echo "Pinging /health"
+          status=$(curl -o /dev/null -s -w "%{http_code}" https://project-login-api.onrender.com/health || echo "000")
+          echo "Status: $status"
+      - name: Ping root (opcional)
+        run: |
+          echo "Pinging root"
+          curl -s https://project-login-api.onrender.com/ > /dev/null || true

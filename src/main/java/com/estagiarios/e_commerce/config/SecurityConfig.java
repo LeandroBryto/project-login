@@ -56,6 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
+                        // Health check endpoint (para keep-alive)
+                        .requestMatchers("/health").permitAll()
                         // Swagger endpoints
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
@@ -65,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/moderator/**").hasAnyRole("MODERATOR", "ADMIN")
-                        // Qualquer outra requisição requer autenticação
+                        
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
