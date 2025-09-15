@@ -51,7 +51,7 @@ public class AuthController {
         log.info("Tentativa de login para email: {}", maskEmail(email));
 
         try {
-            // Autenticar usuário usando Spring Security
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             email,
@@ -61,10 +61,10 @@ public class AuthController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Gerar JWT token
+
             String jwt = tokenProvider.generateToken(authentication);
 
-            // Obter dados do usuário autenticado para log
+
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
             log.info("Login realizado com sucesso para usuário: {}", userPrincipal.getNome());

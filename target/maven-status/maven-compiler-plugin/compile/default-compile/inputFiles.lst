@@ -2,6 +2,7 @@ C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\config\SecurityConfig.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\config\SwaggerConfig.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\controller\AuthController.java
+C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\controller\HealthController.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\dto\ApiResponse.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\dto\JwtAuthenticationResponse.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\dto\LoginRequest.java
@@ -9,8 +10,8 @@ C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\ECommerceApplication.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\entity\Role.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\entity\Usuario.java
-C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\exception\GlobalExceptionHandler.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\repository\UsuarioRepository.java
+C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\security\exception\GlobalExceptionHandler.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\security\JwtAuthenticationFilter.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\security\JwtTokenProvider.java
 C:\Users\leandro.brito\Downloads\e-commerce\e-commerce\e-commerce\src\main\java\com\estagiarios\e_commerce\security\UserPrincipal.java

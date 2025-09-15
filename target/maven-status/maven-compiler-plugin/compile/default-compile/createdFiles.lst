@@ -1,4 +1,3 @@
-com\estagiarios\e_commerce\exception\GlobalExceptionHandler.class
 com\estagiarios\e_commerce\controller\AuthController.class
 com\estagiarios\e_commerce\config\SwaggerConfig.class
 com\estagiarios\e_commerce\service\UsuarioService.class

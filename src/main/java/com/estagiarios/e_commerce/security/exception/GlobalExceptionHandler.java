@@ -1,4 +1,4 @@
-package com.estagiarios.e_commerce.exception;
+package com.estagiarios.e_commerce.security.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Global Exception Handler para tratamento padronizado de exceções
- */
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Trata exceções de validação de campos
-     */
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationExceptions(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -42,9 +38,7 @@ public class GlobalExceptionHandler {
 
 
 
-    /**
-     * Trata exceções de autenticação
-     */
+
     @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
     public ResponseEntity<String> handleAuthenticationException(
             Exception ex, HttpServletRequest request) {
@@ -53,9 +47,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
     }
 
-    /**
-     * Trata exceções genéricas não mapeadas
-     */
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(
             Exception ex, HttpServletRequest request) {
