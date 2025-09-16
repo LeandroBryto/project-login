@@ -2,7 +2,7 @@
 
 on:
   schedule:
-    - cron: "0 */10* * *" # a cada 1 hora (UTC)
+    - cron: "*/10 * * * *"
   workflow_dispatch: # permite rodar manualmente
 
 jobs:
@@ -18,4 +18,5 @@ jobs:
         run: |
           echo "Pinging root"
           curl -s https://project-login-api.onrender.com/ > /dev/null || true
+
 
